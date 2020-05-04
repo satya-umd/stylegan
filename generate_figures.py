@@ -38,8 +38,8 @@ def load_Gs(url):
 def load_Gss(file):
     if file not in _Gs_cache:
         _G, _D, Gs = pickle.load(open(file,'rb'))
-        Gs_cache[file] = Gs
-    return Gs_cache[file]
+        _Gs_cache[file] = Gs
+    return _Gs_cache[file]
 
 
 #----------------------------------------------------------------------------
