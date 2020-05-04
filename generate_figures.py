@@ -18,7 +18,7 @@ import config
 #----------------------------------------------------------------------------
 # Helpers for loading and using pre-trained generators.
 
-url_ffhq        = 'https://drive.google.com/uc?id=12FCRp0hc4lPybCe3k9uKUykF8M90loPA'#'https://drive.google.com/uc?id=1MEGjdvVpUsu1jB4zrXZN7Y4kBBOzizDQ' # karras2019stylegan-ffhq-1024x1024.pkl
+url_ffhq        = '/home/satya_pradeep8/stylegan/results/00005-sgan-church-1gpu/network-snapshot-005365.pkl'#'https://drive.google.com/uc?id=12FCRp0hc4lPybCe3k9uKUykF8M90loPA'#'https://drive.google.com/uc?id=1MEGjdvVpUsu1jB4zrXZN7Y4kBBOzizDQ' # karras2019stylegan-ffhq-1024x1024.pkl
 url_celebahq    = 'https://drive.google.com/uc?id=1MGqJl28pN4t7SAtSrPdSRJSQJqahkzUf' # karras2019stylegan-celebahq-1024x1024.pkl
 url_bedrooms    = 'https://drive.google.com/uc?id=1MOSKeGF0FJcivpBI7s63V9YHloUTORiF' # karras2019stylegan-bedrooms-256x256.pkl
 url_cars        = 'https://drive.google.com/uc?id=1MJ6iCfNtMIRicihwRorsM3b7mmtmK9c3' # karras2019stylegan-cars-512x384.pkl
@@ -34,6 +34,13 @@ def load_Gs(url):
             _G, _D, Gs = pickle.load(f)
         _Gs_cache[url] = Gs
     return _Gs_cache[url]
+
+def load_Gss(file):
+    if file not in _Gs_cache:
+        _G, _D, Gs = pickle.load(open(file,'rb'))
+        Gs_cache[file] = Gs
+    return Gs_cache[file]
+
 
 #----------------------------------------------------------------------------
 # Figures 2, 3, 10, 11, 12: Multi-resolution grid of uncurated result images.
@@ -144,11 +151,11 @@ def draw_truncation_trick_figure(png, Gs, w, h, seeds, psis):
 def main():
     tflib.init_tf()
     os.makedirs(config.result_dir, exist_ok=True)
-    draw_uncurated_result_figure(os.path.join(config.result_dir, 'figure02-uncurated-ffhq.png'), load_Gs(url_ffhq), cx=0, cy=0, cw=128, ch=128, rows=3, lods=[0,1,2,2,3,3], seed=5)
-    draw_style_mixing_figure(os.path.join(config.result_dir, 'figure03-style-mixing.png'), load_Gs(url_ffhq), w=128, h=128, src_seeds=[639,701,687,615,2268], dst_seeds=[888,829,1898,1733,1614,845], style_ranges=[range(0,4)]*3+[range(4,8)]*2+[range(8,12)])
-    draw_noise_detail_figure(os.path.join(config.result_dir, 'figure04-noise-detail.png'), load_Gs(url_ffhq), w=128, h=128, num_samples=100, seeds=[1157,1012])
-    draw_noise_components_figure(os.path.join(config.result_dir, 'figure05-noise-components.png'), load_Gs(url_ffhq), w=128, h=128, seeds=[1967,1555], noise_ranges=[range(0, 18), range(0, 0), range(8, 18), range(0, 8)], flips=[1])
-    draw_truncation_trick_figure(os.path.join(config.result_dir, 'figure08-truncation-trick.png'), load_Gs(url_ffhq), w=128, h=128, seeds=[91,388], psis=[1, 0.7, 0.5, 0, -0.5, -1])
+    draw_uncurated_result_figure(os.path.join(config.result_dir, 'figure02-uncurated-ffhq.png'), load_Gss(url_ffhq), cx=0, cy=0, cw=128, ch=128, rows=3, lods=[0,1,2,2,3,3], seed=5)
+    draw_style_mixing_figure(os.path.join(config.result_dir, 'figure03-style-mixing.png'), load_Gss(url_ffhq), w=128, h=128, src_seeds=[639,701,687,615,2268], dst_seeds=[888,829,1898,1733,1614,845], style_ranges=[range(0,4)]*3+[range(4,8)]*2+[range(8,12)])
+    draw_noise_detail_figure(os.path.join(config.result_dir, 'figure04-noise-detail.png'), load_Gss(url_ffhq), w=128, h=128, num_samples=100, seeds=[1157,1012])
+    draw_noise_components_figure(os.path.join(config.result_dir, 'figure05-noise-components.png'), load_Gss(url_ffhq), w=128, h=128, seeds=[1967,1555], noise_ranges=[range(0, 18), range(0, 0), range(8, 18), range(0, 8)], flips=[1])
+    draw_truncation_trick_figure(os.path.join(config.result_dir, 'figure08-truncation-trick.png'), load_Gss(url_ffhq), w=128, h=128, seeds=[91,388], psis=[1, 0.7, 0.5, 0, -0.5, -1])
     #draw_uncurated_result_figure(os.path.join(config.result_dir, 'figure10-uncurated-bedrooms.png'), load_Gs(url_bedrooms), cx=0, cy=0, cw=256, ch=256, rows=5, lods=[0,0,1,1,2,2,2], seed=0)
     #draw_uncurated_result_figure(os.path.join(config.result_dir, 'figure11-uncurated-cars.png'), load_Gs(url_cars), cx=0, cy=64, cw=512, ch=384, rows=4, lods=[0,1,2,2,3,3], seed=2)
     #draw_uncurated_result_figure(os.path.join(config.result_dir, 'figure12-uncurated-cats.png'), load_Gs(url_cats), cx=0, cy=0, cw=256, ch=256, rows=5, lods=[0,0,1,1,2,2,2], seed=1)
