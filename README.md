@@ -1,5 +1,11 @@
 
+
 Link to Pre-Trained Network on LSUN dataset - [church_256x256](https://drive.google.com/file/d/12FCRp0hc4lPybCe3k9uKUykF8M90loPA/view?usp=sharing) 
+
+[Report](https://drive.google.com/file/d/1z_X4ftzWH6zWYcmC8cetxVSg4R3pXLLM/view?usp=sharing)
+
+###############
+
 
 ## StyleGAN &mdash; Official TensorFlow Implementation
 ![Python 3.6](https://img.shields.io/badge/python-3.6-green.svg?style=plastic)
